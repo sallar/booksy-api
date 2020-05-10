@@ -1,0 +1,14 @@
+{
+  "name": "booksy-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@now/node": "^1.6.0",
+    "faunadb": "^2.14.0",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.9"
+  }
+}
