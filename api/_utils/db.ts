@@ -5,6 +5,11 @@ const client = new faunadb.Client({
   secret: process.env.FAUNA_ADMIN_SECRET,
 });
 
+export interface GoogleBook {
+  id: string;
+  [key: string]: any;
+}
+
 const signUp = (email: string, username: string) => {
   return q.Create(q.Collection("users"), {
     data: {
@@ -50,6 +55,38 @@ export const signInOrSignUp = (
           ),
         },
         q.Do(signIn(q.Var("userRef")))
+      )
+    )
+  );
+};
+
+const createBook = ({ id, ...data }: GoogleBook) => {
+  return q.Create(q.Collection("books"), {
+    data: {
+      googleBookId: id,
+      ...data,
+    },
+  });
+};
+
+export const getOrCreateGoogleBook = (book: GoogleBook) => {
+  return client.query(
+    q.If(
+      q.IsEmpty(q.Match(q.Index("books_by_googleBookId"), book.id)),
+      q.Let(
+        {
+          bookRef: q.Select(["ref"], createBook(book)),
+        },
+        q.Do(q.Select(["id"], q.Var("bookRef")))
+      ),
+      q.Let(
+        {
+          bookRef: q.Select(
+            ["ref"],
+            q.Get(q.Match(q.Index("books_by_googleBookId"), book.id))
+          ),
+        },
+        q.Do(q.Select(["id"], q.Var("bookRef")))
       )
     )
   );
