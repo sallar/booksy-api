@@ -6,7 +6,7 @@
   "dependencies": {
     "@now/node": "^1.6.0",
     "faunadb": "^2.14.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.3.9"
